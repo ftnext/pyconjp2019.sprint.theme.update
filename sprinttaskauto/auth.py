@@ -1,2 +1,2 @@
-def gservice_credential(secert_path):
+def gservice_credential():
     raise NotImplementedError

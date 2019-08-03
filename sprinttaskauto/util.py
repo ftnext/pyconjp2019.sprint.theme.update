@@ -9,7 +9,7 @@ class CustomSpreadsheet:
         self.sheet_id = sheet_id
 
 
-def create_custom_spreadsheet(secret_path, spreadsheet_id, sheet_id):
-    credential = a.gservice_credential(secret_path)
+def create_custom_spreadsheet(spreadsheet_id, sheet_id):
+    credential = a.gservice_credential()
     sheet_access = s.access_spreadsheet(credential)
     return CustomSpreadsheet(sheet_access, spreadsheet_id, sheet_id)
