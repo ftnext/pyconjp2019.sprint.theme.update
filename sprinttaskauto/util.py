@@ -8,8 +8,21 @@ class CustomSpreadsheet:
         self.spreadsheet_id = spreadsheet_id
         self.sheet_id = sheet_id
 
-    def _build_body(self):
-        raise NotImplementedError
+    def _build_body(self, data):
+        return {
+            'requests': {
+                'pasteData': {
+                    'coordinate': {
+                        'sheetId': self.sheet_id,
+                        'rowIndex': 0,
+                        'columnIndex': 0
+                    },
+                    'data': data,
+                    'type': 'PASTE_VALUES',
+                    'delimiter': ',',
+                }
+            }
+        }
 
     def write(self, data):
         body = self._build_body(data)

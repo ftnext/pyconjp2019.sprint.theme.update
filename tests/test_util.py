@@ -39,3 +39,30 @@ class TestCustomSpreadsheetWrite(TestCase):
         self.assertEqual(
             [call(spreadsheetId=spreadsheet_id, body=body)],
             sheet_access.batchUpdate.call_args_list)
+
+
+class TestCustomSpreadsheetBuildBody(TestCase):
+    def test(self):
+        sheet_access = MagicMock()
+        spreadsheet_id = MagicMock()
+        sheet_id = MagicMock()
+        sheet = u.CustomSpreadsheet(sheet_access, spreadsheet_id, sheet_id)
+        data = MagicMock()
+        expected = {
+            'requests': {
+                'pasteData': {
+                    'coordinate': {
+                        'sheetId': sheet_id,
+                        'rowIndex': 0,
+                        'columnIndex': 0
+                    },
+                    'data': data,
+                    'type': 'PASTE_VALUES',
+                    'delimiter': ',',
+                }
+            }
+        }
+
+        actual = sheet._build_body(data)
+
+        self.assertEqual(expected, actual)
