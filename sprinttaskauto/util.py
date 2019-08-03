@@ -38,4 +38,18 @@ def create_custom_spreadsheet(spreadsheet_id, sheet_id):
 
 
 def load_data_send_format(answer_file):
+    leader_lines = _select_leader_lines(answer_file)
+    answer_line_list = _create_answer_line_list(leader_lines)
+    return _format_answer_line_list(answer_line_list)
+
+
+def _select_leader_lines(answer_file):
+    raise NotImplementedError
+
+
+def _create_answer_line_list(leader_lines):
+    raise NotImplementedError
+
+
+def _format_answer_line_list(answer_line_list):
     raise NotImplementedError

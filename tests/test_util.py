@@ -68,3 +68,25 @@ class TestCustomSpreadsheetBuildBody(TestCase):
         actual = sheet._build_body(data)
 
         self.assertEqual(expected, actual)
+
+
+class TestLoadDataSendFormat(TestCase):
+    @patch('sprinttaskauto.util._format_answer_line_list')
+    @patch('sprinttaskauto.util._create_answer_line_list')
+    @patch('sprinttaskauto.util._select_leader_lines')
+    def test(
+            self, select_leader_lines, create_answer_line_list,
+            format_answer_line_list):
+        answer_file = MagicMock()
+        leader_lines = select_leader_lines.return_value
+        answer_line_list = create_answer_line_list.return_value
+
+        data = u.load_data_send_format(answer_file)
+
+        self.assertEqual(
+            [call(answer_file)], select_leader_lines.call_args_list)
+        self.assertEqual(
+            [call(leader_lines)], create_answer_line_list.call_args_list)
+        self.assertEqual(
+            [call(answer_line_list)], format_answer_line_list.call_args_list)
+        self.assertEqual(data, format_answer_line_list.return_value)
