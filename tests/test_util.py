@@ -21,3 +21,6 @@ class TestCustomSpreadsheetFactory(TestCase):
             [call(secret_path)], gservice_credential.call_args_list)
         self.assertEqual([call(credential)], access_spreadsheet.call_args_list)
         self.assertIsInstance(sheet, u.CustomSpreadsheet)
+        self.assertEqual(sheet.sheet_access, sheet_access)
+        self.assertEqual(sheet.spreadsheet_id, spreadsheet_id)
+        self.assertEqual(sheet.sheet_id, sheet_id)
