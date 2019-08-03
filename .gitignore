@@ -125,3 +125,7 @@ dmypy.json
 
 # Editor config
 .vscode
+
+# Repository config
+# Googleスプレッドシート接続への認証情報を置く
+secret
