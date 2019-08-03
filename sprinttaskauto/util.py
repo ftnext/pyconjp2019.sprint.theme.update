@@ -26,8 +26,9 @@ class CustomSpreadsheet:
 
     def write(self, data):
         body = self._build_body(data)
-        self.sheet_access.batchUpdate(
+        batch_update = self.sheet_access.batchUpdate(
             spreadsheetId=self.spreadsheet_id, body=body)
+        batch_update.execute()
 
 
 def create_custom_spreadsheet(spreadsheet_id, sheet_id):

@@ -32,6 +32,7 @@ class TestCustomSpreadsheetWrite(TestCase):
         sheet = u.CustomSpreadsheet(sheet_access, spreadsheet_id, sheet_id)
         data = MagicMock()
         body = build_body.return_value
+        batch_update = sheet_access.batchUpdate.return_value
 
         sheet.write(data)
 
@@ -39,6 +40,7 @@ class TestCustomSpreadsheetWrite(TestCase):
         self.assertEqual(
             [call(spreadsheetId=spreadsheet_id, body=body)],
             sheet_access.batchUpdate.call_args_list)
+        self.assertEqual([call()], batch_update.execute.call_args_list)
 
 
 class TestCustomSpreadsheetBuildBody(TestCase):
