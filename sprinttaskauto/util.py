@@ -8,6 +8,14 @@ class CustomSpreadsheet:
         self.spreadsheet_id = spreadsheet_id
         self.sheet_id = sheet_id
 
+    def _build_body(self):
+        raise NotImplementedError
+
+    def write(self, data):
+        body = self._build_body(data)
+        self.sheet_access.batchUpdate(
+            spreadsheetId=self.spreadsheet_id, body=body)
+
 
 def create_custom_spreadsheet(spreadsheet_id, sheet_id):
     credential = a.gservice_credential()

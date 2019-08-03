@@ -21,3 +21,21 @@ class TestCustomSpreadsheetFactory(TestCase):
         self.assertEqual(sheet.sheet_access, sheet_access)
         self.assertEqual(sheet.spreadsheet_id, spreadsheet_id)
         self.assertEqual(sheet.sheet_id, sheet_id)
+
+
+class TestCustomSpreadsheetWrite(TestCase):
+    @patch('sprinttaskauto.util.CustomSpreadsheet._build_body')
+    def test(self, build_body):
+        sheet_access = MagicMock()
+        spreadsheet_id = MagicMock()
+        sheet_id = MagicMock()
+        sheet = u.CustomSpreadsheet(sheet_access, spreadsheet_id, sheet_id)
+        data = MagicMock()
+        body = build_body.return_value
+
+        sheet.write(data)
+
+        self.assertEqual([call(data)], build_body.call_args_list)
+        self.assertEqual(
+            [call(spreadsheetId=spreadsheet_id, body=body)],
+            sheet_access.batchUpdate.call_args_list)
