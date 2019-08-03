@@ -1,2 +1,6 @@
+from apiclient import discovery
+
+
 def access_spreadsheet(credential):
-    raise NotImplementedError
+    service = discovery.build('sheets', 'v4', credentials=credential)
+    return service.spreadsheets()
