@@ -127,5 +127,7 @@ dmypy.json
 .vscode
 
 # Repository config
+# Googleスプレッドシートにアップロードする対象のファイルを置く
+files
 # Googleスプレッドシート接続への認証情報を置く
 secret
