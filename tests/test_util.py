@@ -194,3 +194,34 @@ class TestFormatAnswerLineList(TestCase):
 
         self.assertEqual([call()], data_for_spreadsheet.call_args_list)
         self.assertEqual(f'{header}\n{line_a}', data)
+
+
+class TestAnswerLineDataForSpreadsheet(TestCase):
+    def test_not_double_quote(self):
+        answer_line = u.AnswerLine(
+            'kumiko', 'うまくなりたい', '悔しくって死にそう',
+            '頑張れば何かがあるって信じてる')
+        expected = ('"kumiko","うまくなりたい","悔しくって死にそう",'
+                    '"頑張れば何かがあるって信じてる"')
+
+        actual = answer_line.data_for_spreadsheet()
+
+        self.assertEqual(expected, actual)
+
+    def test_include_double_quote(self):
+        answer_line = u.AnswerLine(
+            'mizo"re', '"オーボエ"だってやってない', '希美が私の"全部"なの',
+            '希美は私の"トクベツ"'
+        )
+        expected = ('"mizo\'re","\'オーボエ\'だってやってない",'
+                    '"希美が私の\'全部\'なの","希美は私の\'トクベツ\'"')
+
+        actual = answer_line.data_for_spreadsheet()
+
+        self.assertEqual(expected, actual)
+
+
+class TestEscapeDoubleQuote(TestCase):
+    def test(self):
+        actual = u.escape_double_quote('"Isn\'t," they said.')
+        self.assertEqual('\'Isn\'t,\' they said.', actual)

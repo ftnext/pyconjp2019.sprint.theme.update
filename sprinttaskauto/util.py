@@ -106,4 +106,13 @@ class AnswerLine:
     message: str
 
     def data_for_spreadsheet(self):
-        raise NotImplementedError
+        leader_name = escape_double_quote(self.leader_name)
+        project = escape_double_quote(self.project)
+        goal = escape_double_quote(self.goal)
+        message = escape_double_quote(self.message)
+        return f'"{leader_name}","{project}","{goal}","{message}"'
+
+
+def escape_double_quote(string):
+    """ダブルクォートをシングルクォートに置き換えた文字列を返す"""
+    return string.replace('"', "'")
