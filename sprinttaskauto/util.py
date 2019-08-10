@@ -1,3 +1,5 @@
+import csv
+
 import sprinttaskauto.auth as a
 import sprinttaskauto.service as s
 
@@ -44,7 +46,18 @@ def load_data_send_format(answer_file):
 
 
 def _select_leader_lines(answer_file):
-    raise NotImplementedError
+    leader_lines = []
+    with open(answer_file, encoding='shift_jis_2004') as fin:
+        reader = csv.reader(fin)
+        header = next(reader)
+        type_index = header.index('参加枠名')
+        status_index = header.index('参加ステータス')
+        leader_lines.append(header)
+        for row in reader:
+            if row[type_index] == 'Leader（リーダー）' \
+                    and row[status_index] == '参加':
+                leader_lines.append(row)
+    return leader_lines
 
 
 def _create_answer_line_list(leader_lines):

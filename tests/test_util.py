@@ -1,3 +1,5 @@
+import os
+
 from unittest import TestCase
 from unittest.mock import call, MagicMock, patch
 
@@ -90,3 +92,45 @@ class TestLoadDataSendFormat(TestCase):
         self.assertEqual(
             [call(answer_line_list)], format_answer_line_list.call_args_list)
         self.assertEqual(data, format_answer_line_list.return_value)
+
+
+class TestSelectLeaderLines(TestCase):
+    @patch('builtins.open')
+    @patch('csv.reader')
+    def test_call_args(self, csv_reader, mock_open):
+        answer_file = MagicMock()
+        fin = mock_open.return_value.__enter__.return_value
+
+        u._select_leader_lines(answer_file)
+
+        self.assertEqual(
+            [call(answer_file, encoding='shift_jis_2004')],
+            mock_open.call_args_list)
+        self.assertEqual([call(fin)], csv_reader.call_args_list)
+
+    def test_integrate(self):
+        answer_file = os.path.join(
+            os.path.dirname(__file__), 'data', 'test_select_leader_lines.csv')
+
+        leader_lines = u._select_leader_lines(answer_file)
+
+        self.assertEqual(2, len(leader_lines))
+        self.assertEqual(
+            ['参加枠名', 'ユーザー名', '表示名', 'コメント',
+             '参加ステータス', '出欠ステータス',
+             'スプリントリーダーやりたい / I would like to lead a sprint',
+             'リーダーをやりたいプロジェクトを一言で言うと？ / In a word, '
+             'what project do you want to lead a sprint for?',
+             'プロジェクトの詳細やスプリントで達成したいことを教えてください '
+             '/  Tell us some details about your project '
+             'or what you want to achieve in the sprint',
+             '参加者に一言お願いします / Anything you wish to say to potential '
+             'sprint partners （例：初心者用のチケットも用意してお待ちしています！）',
+             '更新日時', '受付番号'
+             ], leader_lines[0])
+        self.assertEqual(
+            ['Leader（リーダー）', '高坂麗奈', 'reina',
+             'PyCon JP 2019 Sprint に参加を申し込みました！', '参加', '',
+             'はい / Yes', '特別になりたい', '他の奴らと,同じになりたくない',
+             '悔しくって死にそう', '2019年7月13日 13時02分', '1234567'],
+            leader_lines[1])
