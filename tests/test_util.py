@@ -134,3 +134,35 @@ class TestSelectLeaderLines(TestCase):
              'はい / Yes', '特別になりたい', '他の奴らと,同じになりたくない',
              '悔しくって死にそう', '2019年7月13日 13時02分', '1234567'],
             leader_lines[1])
+
+
+class TestCreateAnswerLineList(TestCase):
+    def test(self):
+        leader_lines = [
+            ['参加枠名', 'ユーザー名', '表示名', 'コメント',
+             '参加ステータス', '出欠ステータス',
+             'スプリントリーダーやりたい / I would like to lead a sprint',
+             'リーダーをやりたいプロジェクトを一言で言うと？ / In a word, '
+             'what project do you want to lead a sprint for?',
+             'プロジェクトの詳細やスプリントで達成したいことを教えてください '
+             '/  Tell us some details about your project '
+             'or what you want to achieve in the sprint',
+             '参加者に一言お願いします / Anything you wish to say to potential '
+             'sprint partners （例：初心者用のチケットも用意してお待ちしています！）',
+             '更新日時', '受付番号'
+             ],
+            ['Leader（リーダー）', '高坂麗奈', 'reina',
+             'PyCon JP 2019 Sprint に参加を申し込みました！', '参加', '',
+             'はい / Yes', '特別になりたい', '他の奴らと,同じになりたくない',
+             '悔しくって死にそう', '2019年7月13日 13時02分', '1234567']
+        ]
+
+        answer_line_list = u._create_answer_line_list(leader_lines)
+
+        self.assertEqual(1, len(answer_line_list))
+        answer_line = answer_line_list[0]
+        self.assertIsInstance(answer_line, u.AnswerLine)
+        self.assertEqual('reina', answer_line.leader_name)
+        self.assertEqual('特別になりたい', answer_line.project)
+        self.assertEqual('他の奴らと,同じになりたくない', answer_line.goal)
+        self.assertEqual('悔しくって死にそう', answer_line.message)

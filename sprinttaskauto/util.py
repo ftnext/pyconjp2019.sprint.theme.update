@@ -1,4 +1,5 @@
 import csv
+from dataclasses import dataclass
 
 import sprinttaskauto.auth as a
 import sprinttaskauto.service as s
@@ -61,8 +62,32 @@ def _select_leader_lines(answer_file):
 
 
 def _create_answer_line_list(leader_lines):
-    raise NotImplementedError
+    header = leader_lines[0]
+    name_index = header.index('表示名')
+    project_index = header.index(
+        'リーダーをやりたいプロジェクトを一言で言うと？ / '
+        'In a word, what project do you want to lead a sprint for?')
+    goal_index = header.index(
+        'プロジェクトの詳細やスプリントで達成したいことを教えてください /  '
+        'Tell us some details about your project '
+        'or what you want to achieve in the sprint')
+    message_index = header.index(
+        '参加者に一言お願いします / '
+        'Anything you wish to say to potential sprint partners '
+        '（例：初心者用のチケットも用意してお待ちしています！）')
+    return [AnswerLine(
+                line[name_index], line[project_index],
+                line[goal_index], line[message_index])
+            for line in leader_lines[1:]]
 
 
 def _format_answer_line_list(answer_line_list):
     raise NotImplementedError
+
+
+@dataclass
+class AnswerLine:
+    leader_name: str
+    project: str
+    goal: str
+    message: str
