@@ -82,7 +82,20 @@ def _create_answer_line_list(leader_lines):
 
 
 def _format_answer_line_list(answer_line_list):
-    raise NotImplementedError
+    datum = [
+        '"表示名",'
+        '"リーダーをやりたいプロジェクトを一言で言うと？ / In a word, '
+        'what project do you want to lead a sprint for?",'
+        '"プロジェクトの詳細やスプリントで達成したいことを教えてください /  '
+        'Tell us some details about your project '
+        'or what you want to achieve in the sprint",'
+        '"参加者に一言お願いします / '
+        'Anything you wish to say to potential sprint partners '
+        '（例：初心者用のチケットも用意してお待ちしています！）"'
+    ]
+    for answer_line in answer_line_list:
+        datum.append(answer_line.data_for_spreadsheet())
+    return '\n'.join(datum)
 
 
 @dataclass
@@ -91,3 +104,6 @@ class AnswerLine:
     project: str
     goal: str
     message: str
+
+    def data_for_spreadsheet(self):
+        raise NotImplementedError

@@ -166,3 +166,31 @@ class TestCreateAnswerLineList(TestCase):
         self.assertEqual('特別になりたい', answer_line.project)
         self.assertEqual('他の奴らと,同じになりたくない', answer_line.goal)
         self.assertEqual('悔しくって死にそう', answer_line.message)
+
+
+class TestFormatAnswerLineList(TestCase):
+    @patch('sprinttaskauto.util.AnswerLine.data_for_spreadsheet')
+    def test(self, data_for_spreadsheet):
+        header = ('"表示名",'
+                  '"リーダーをやりたいプロジェクトを一言で言うと？ / In a word, '
+                  'what project do you want to lead a sprint for?",'
+                  '"プロジェクトの詳細やスプリントで達成したいことを教えてください /  '
+                  'Tell us some details about your project '
+                  'or what you want to achieve in the sprint",'
+                  '"参加者に一言お願いします / '
+                  'Anything you wish to say to potential sprint partners '
+                  '（例：初心者用のチケットも用意してお待ちしています！）"')
+        data_for_spreadsheet.return_value = (
+            '"表示名","特別になりたい","他の奴らと,同じになりたくない",'
+            '"悔しくって死にそう"')
+        line_a = data_for_spreadsheet.return_value
+
+        answer_line_list = [
+            u.AnswerLine(
+                'reina', '特別になりたい', '他の奴らと,同じになりたくない',
+                '悔しくって死にそう')
+        ]
+        data = u._format_answer_line_list(answer_line_list)
+
+        self.assertEqual([call()], data_for_spreadsheet.call_args_list)
+        self.assertEqual(f'{header}\n{line_a}', data)
